@@ -48,13 +48,13 @@ BOARD_KERNEL_CMDLINE += loop.max_part=7
 # Darkness Mods
 BOARD_KERNEL_CMDLINE += boot_cpus=0,1,2,3 kpti=0 nopti darkness_mode=1 audit=0 quiet
 # Boot in Permissive
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+# BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET := 0x01000000
 TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_CONFIG := darkness_defconfig
+TARGET_KERNEL_CONFIG := gemini_defconfig
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8996
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-gnu-
 KERNEL_TOOLCHAIN := $(shell pwd)/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-gnu/bin
