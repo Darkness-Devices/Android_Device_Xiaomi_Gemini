@@ -2,6 +2,8 @@
 # Device        : Xiaomi Mi 5 (gemini)
 # Maintainer    : MOVZX (MOVZX@Telegram.org)
 #
+# "You hate me, but you cannot defeat me..." quote from Medieval II Total War
+#
 
 on boot
     # Set CPU Parameters
@@ -35,6 +37,19 @@ on darkness
             chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
             write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1593600
             write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            # DarkEnergy
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor darkenergy
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/gold_suspend_max_freq
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/silver_suspend_max_freq
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/down_rate_limit_us 20000
+                write /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/gold_suspend_max_freq 1248000
+                write /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/iowait_boost_enable 0
+                write /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/silver_suspend_max_freq 1036800
+                write /sys/devices/system/cpu/cpu0/cpufreq/darkenergy/up_rate_limit_us 500
             # SchedUtil
                 chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
                 write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
@@ -49,6 +64,19 @@ on darkness
             chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
             write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
             write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            # DarkEnergy
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor darkenergy
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/gold_suspend_max_freq
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/silver_suspend_max_freq
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/down_rate_limit_us 20000
+                write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/gold_suspend_max_freq 1248000
+                write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/iowait_boost_enable 0
+                write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/silver_suspend_max_freq 1036800
+                write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/up_rate_limit_us 500
             # SchedUtil
                 chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
                 write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
@@ -67,9 +95,9 @@ on darkness
         write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 30
         write /sys/module/cpu_boost/parameters/input_boost_enabled 1
         write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 1:960000 2:1248000 3:1248000"
-        write /sys/module/cpu_boost/parameters/input_boost_ms 100
+        write /sys/module/cpu_boost/parameters/input_boost_ms 1500
         write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 20
-        write /sys/module/cpu_input_boost/parameters/input_boost_duration 100
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 1500
         write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1248000
         write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 960000
     #
@@ -99,6 +127,11 @@ on darkness
         write /proc/sys/vm/swappiness 60
         write /proc/sys/vm/vfs_cache_pressure 100
     #
+    # UKSM Tweaks
+        write /sys/kernel/mm/uksm/run 0
+        write /sys/kernel/mm/uksm/run_charging 0
+        write /sys/kernel/mm/uksm/sleep_millisecs 1000
+    #
     # Sound Control
         # ElementalX
             # write /sys/kernel/sound_control/headphone_gain "8 8"
@@ -111,19 +144,19 @@ on darkness
             # write /sys/devices/virtual/misc/soundcontrol/volume_boost 8
     #
     # Set I/O Scheduler
-        setprop sys.io.scheduler cfq
+        setprop sys.io.scheduler bfq
         # SDA
             write /sys/block/sda/queue/iostats 0
             write /sys/block/sda/queue/read_ahead_kb 128
-            write /sys/block/sda/queue/scheduler cfq
+            write /sys/block/sda/queue/scheduler bfq
         # SDE
             write /sys/block/sde/queue/iostats 0
             write /sys/block/sde/queue/read_ahead_kb 128
-            write /sys/block/sde/queue/scheduler cfq
+            write /sys/block/sde/queue/scheduler bfq
         # DM-0
             write /sys/block/dm-0/queue/iostats 0
             write /sys/block/dm-0/queue/read_ahead_kb 128
-            write /sys/block/dm-0/queue/scheduler cfq
+            write /sys/block/dm-0/queue/scheduler bfq
     #
     # SCSI Tweaks
         write /sys/module/scsi_mod/parameters/use_blk_mq Y
@@ -138,6 +171,11 @@ on darkness
         write /sys/kernel/dyn_fsync/Dyn_fsync_active 1
         write /sys/module/msm_thermal/parameters/enabled Y
         write /sys/module/workqueue/parameters/power_efficient Y
+    #
+    # Thermal Configs
+        setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
+        stop thermal-engine
+        start thermal-engine
     #
     # Darkness Mods
         setprop dalvik.vm.dex2oat-threads 4
@@ -154,4 +192,6 @@ on property:dev.bootcomplete=1
     # Fire up the Darkness!
     # You hate me, but you cannot defeat me...
         trigger darkness
+    # DK, not Syberia...
+        stop vendor.msm_irqbalance
 
