@@ -1,0 +1,258 @@
+#
+# Device        : Xiaomi Mi 5 (gemini)
+# Maintainer    : MOVZX (MOVZX@Telegram.org)
+#
+
+# SPECTRUM KERNEL MANAGER
+# Ramdisk file for profile based kernel management
+# Implimentation inspired by Franco's fku profiles
+
+# Initialization
+on property:sys.boot_completed=1
+    # Set default profile on first boot
+    exec u:r:init:s0 root root -- /init.spectrum.sh
+    exec u:r:su:s0 root root -- /init.spectrum.sh
+    exec u:r:init:s0 root root -- /vendor/etc/init/hw/init.spectrum.sh
+    exec u:r:su:s0 root root -- /vendor/etc/init/hw/init.spectrum.sh
+    # Enable Spectrum support
+    setprop spectrum.support 1
+
+    setprop persist.spectrum.kernel Darkness
+
+#
+# Darkness Modes
+#
+
+# Balanced (default profile)
+on property:persist.spectrum.profile=0
+    # Set CPU Parameters
+        # Little
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1593600
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 20000
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 500
+        # Big
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            write /sys/devices/system/cpu/cpu2/online 1
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 20000
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 500
+    #
+    # CPU Input Boost
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 50
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 30
+        write /sys/module/cpu_boost/parameters/input_boost_ms 100
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 20
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 100
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1248000
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 960000
+    #
+    # Dynamic SchedTune Boost
+        write /dev/stune/foreground/schedtune.sched_boost 20
+        write /dev/stune/rt/schedtune.sched_boost 50
+        write /dev/stune/schedtune.sched_boost 20
+        write /dev/stune/top-app/schedtune.sched_boost 30
+    #
+    # Set Adreno GPU
+        write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
+        write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
+    #
+    # Misc Tweaks
+        write /sys/module/workqueue/parameters/power_efficient Y
+    #
+    # Thermal Configs
+        setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
+
+# Performance
+on property:persist.spectrum.profile=1
+    # Set CPU Parameters
+        # Little
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1593600
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 30000
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 250
+        # Big
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            write /sys/devices/system/cpu/cpu2/online 1
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 30000
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 250
+    #
+    # CPU Input Boost
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 60
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 40
+        write /sys/module/cpu_boost/parameters/input_boost_ms 200
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 30
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 200
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1324800
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 1036800
+    #
+    # Dynamic SchedTune Boost
+        write /dev/stune/foreground/schedtune.sched_boost 30
+        write /dev/stune/rt/schedtune.sched_boost 60
+        write /dev/stune/schedtune.sched_boost 30
+        write /dev/stune/top-app/schedtune.sched_boost 40
+    #
+    # Set Adreno GPU
+        write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
+        write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 214000000
+    #
+    # Misc Tweaks
+        write /sys/module/workqueue/parameters/power_efficient N
+    #
+    # Thermal Configs
+        setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
+
+# Battery
+on property:persist.spectrum.profile=2
+    # Set CPU Parameters
+        # Little
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1190400
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            write /sys/devices/system/cpu/cpu0/online 1
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 10000
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 500
+        # Big
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1632000
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            write /sys/devices/system/cpu/cpu2/online 1
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 10000
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 500
+    #
+    # CPU Input Boost
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 0
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 0
+        write /sys/module/cpu_boost/parameters/input_boost_ms 0
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 0
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 0
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 0
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 0
+    #
+    # Dynamic SchedTune Boost
+        write /dev/stune/foreground/schedtune.sched_boost 0
+        write /dev/stune/rt/schedtune.sched_boost 0
+        write /dev/stune/schedtune.sched_boost 0
+        write /dev/stune/top-app/schedtune.sched_boost 0
+    #
+    # Set Adreno GPU
+        write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 401800000
+        write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
+    #
+    # Misc Tweaks
+        write /sys/module/workqueue/parameters/power_efficient Y
+    #
+    # Thermal Configs
+        setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_battery.conf
+
+# Gaming
+on property:persist.spectrum.profile=3
+    # Set CPU Parameters
+        # Little
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1593600
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 50000
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 100
+        # Big
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            write /sys/devices/system/cpu/cpu2/online 1
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 50000
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 100
+    #
+    # CPU Input Boost
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 70
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 50
+        write /sys/module/cpu_boost/parameters/input_boost_ms 300
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 40
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 300
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1401600
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 1113600
+    #
+    # Dynamic SchedTune Boost
+        write /dev/stune/foreground/schedtune.sched_boost 40
+        write /dev/stune/rt/schedtune.sched_boost 70
+        write /dev/stune/schedtune.sched_boost 40
+        write /dev/stune/top-app/schedtune.sched_boost 50
+    #
+    # Set Adreno GPU
+        write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
+        write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 315000000
+    #
+    # Misc Tweaks
+        write /sys/module/workqueue/parameters/power_efficient N
+    #
+    # Thermal Configs
+        setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
+

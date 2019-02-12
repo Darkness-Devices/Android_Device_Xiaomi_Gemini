@@ -1,0 +1,157 @@
+#
+# Device        : Xiaomi Mi 5 (gemini)
+# Maintainer    : MOVZX (MOVZX@Telegram.org)
+#
+
+on boot
+    # Set CPU Parameters
+        # Disable thermal hotplug to switch governor
+            write /sys/module/msm_thermal/core_control/enabled 0
+        #
+        # Little
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1593600
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            # Performance
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+        # Big
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            # Performance
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor performance
+
+on darkness
+    # Set CPU Parameters
+        # Disable thermal hotplug to switch governor
+            write /sys/module/msm_thermal/core_control/enabled 0
+        #
+        # Little
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1593600
+            write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 20000
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 500
+        # Big
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+            chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+            write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
+            # SchedUtil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable
+                chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 20000
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
+                write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 500
+        #
+        # Re-enable thermal hotplug
+            # write /sys/module/msm_thermal/core_control/enabled 1
+    #
+    # CPU Input Boost
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 50
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 30
+        write /sys/module/cpu_boost/parameters/input_boost_enabled 1
+        write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 1:960000 2:1248000 3:1248000"
+        write /sys/module/cpu_boost/parameters/input_boost_ms 100
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 20
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 100
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1248000
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 960000
+    #
+    # Dynamic SchedTune Boost
+        write /dev/stune/foreground/schedtune.sched_boost 20
+        write /dev/stune/rt/schedtune.sched_boost 50
+        write /dev/stune/schedtune.sched_boost 20
+        write /dev/stune/top-app/schedtune.sched_boost 30
+    #
+    # Set Adreno GPU
+        chmod 777 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
+        chmod 777 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
+        write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
+        write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
+    #
+    # Set LMK
+        write /sys/module/lowmemorykiller/parameters/debug_level 0
+        write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,80640,110592,131072"
+    #
+    # VM Tweaks
+        write /proc/sys/vm/dirty_background_ratio 70
+        write /proc/sys/vm/dirty_ratio 90
+        write /proc/sys/vm/extra_free_kbytes 24300
+        write /proc/sys/vm/min_free_kbytes 4096
+        write /proc/sys/vm/oom_kill_allocating_task 0
+        write /proc/sys/vm/overcommit_ratio 80
+        write /proc/sys/vm/swappiness 60
+        write /proc/sys/vm/vfs_cache_pressure 100
+    #
+    # Sound Control
+        # ElementalX
+            # write /sys/kernel/sound_control/headphone_gain "8 8"
+            # write /sys/kernel/sound_control/mic_gain 5
+            # write /sys/kernel/sound_control/speaker_gain 13
+        # Franco
+            # write /sys/devices/virtual/misc/soundcontrol/earpiece_boost 5
+            # write /sys/devices/virtual/misc/soundcontrol/mic_boost 3
+            # write /sys/devices/virtual/misc/soundcontrol/speaker_boost 8
+            # write /sys/devices/virtual/misc/soundcontrol/volume_boost 8
+    #
+    # Set I/O Scheduler
+        setprop sys.io.scheduler cfq
+        # SDA
+            write /sys/block/sda/queue/iostats 0
+            write /sys/block/sda/queue/read_ahead_kb 128
+            write /sys/block/sda/queue/scheduler cfq
+        # SDE
+            write /sys/block/sde/queue/iostats 0
+            write /sys/block/sde/queue/read_ahead_kb 128
+            write /sys/block/sde/queue/scheduler cfq
+        # DM-0
+            write /sys/block/dm-0/queue/iostats 0
+            write /sys/block/dm-0/queue/read_ahead_kb 128
+            write /sys/block/dm-0/queue/scheduler cfq
+    #
+    # SCSI Tweaks
+        write /sys/module/scsi_mod/parameters/use_blk_mq Y
+    #
+    # Entropy Tweaks
+        write /proc/sys/kernel/random/read_wakeup_threshold 512
+        write /proc/sys/kernel/random/write_wakeup_threshold 1024
+    #
+    # Misc Tweaks
+        write /sys/devices/soc/soc:fpc_fpc1020/enable_wakeup 1
+        chmod 777 /sys/module/workqueue/parameters/power_efficient
+        write /sys/kernel/dyn_fsync/Dyn_fsync_active 1
+        write /sys/module/msm_thermal/parameters/enabled Y
+        write /sys/module/workqueue/parameters/power_efficient Y
+    #
+    # Darkness Mods
+        setprop dalvik.vm.dex2oat-threads 4
+        setprop dalvik.vm.image-dex2oat-threads 4
+        setprop debug.generate-debug-info false
+        setprop net.hostname Darkness
+        setprop ro.data.large_tcp_window_size true
+        setprop ro.sys.fw.dex2oat_thread_count 4
+        setprop ro.sys.sdcardfs true
+        setprop sys.use_fifo_ui 1
+        setprop wifi.supplicant_scan_interval 3600
+
+on property:dev.bootcomplete=1
+    # Fire up the Darkness!
+    # You hate me, but you cannot defeat me...
+        trigger darkness
+
