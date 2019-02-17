@@ -1,15 +1,9 @@
 #
-# Device        : Xiaomi Mi 5 (gemini)
-# Maintainer    : MOVZX (MOVZX@Telegram.org)
+# Device : Xiaomi Mi 5 (gemini) Maintainer : MOVZX (MOVZX@Telegram.org)
 #
 # "You hate me, but you cannot defeat me..." quote from Medieval II Total War
 #
-
-# SPECTRUM KERNEL MANAGER
-# Ramdisk file for profile based kernel management
-# Implimentation inspired by Franco's fku profiles
-
-# Initialization
+# SPECTRUM KERNEL MANAGER Ramdisk file for profile based kernel management Implimentation inspired by Franco's fku profiles Initialization
 on property:sys.boot_completed=1
     # Set default profile on first boot
     exec u:r:init:s0 root root -- /init.spectrum.sh
@@ -18,13 +12,10 @@ on property:sys.boot_completed=1
     exec u:r:su:s0 root root -- /vendor/etc/init/hw/init.spectrum.sh
     # Enable Spectrum support
     setprop spectrum.support 1
-
     setprop persist.spectrum.kernel Darkness
-
 #
 # Darkness Modes
 #
-
 # Balanced (default profile)
 on property:persist.spectrum.profile=0
     # Set CPU Parameters
@@ -77,6 +68,10 @@ on property:persist.spectrum.profile=0
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
     #
+    # Entropy Tweaks
+        write /proc/sys/kernel/random/read_wakeup_threshold 64
+        write /proc/sys/kernel/random/write_wakeup_threshold 896
+    #
     # Misc Tweaks
         write /sys/module/workqueue/parameters/power_efficient Y
     #
@@ -84,7 +79,8 @@ on property:persist.spectrum.profile=0
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
         stop thermal-engine
         start thermal-engine
-
+    # Disable Thermal Engine service
+        stop thermal-engine
 # Performance
 on property:persist.spectrum.profile=1
     # Set CPU Parameters
@@ -137,6 +133,10 @@ on property:persist.spectrum.profile=1
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 214000000
     #
+    # Entropy Tweaks
+        write /proc/sys/kernel/random/read_wakeup_threshold 64
+        write /proc/sys/kernel/random/write_wakeup_threshold 896
+    #
     # Misc Tweaks
         write /sys/module/workqueue/parameters/power_efficient N
     #
@@ -144,7 +144,8 @@ on property:persist.spectrum.profile=1
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
         stop thermal-engine
         start thermal-engine
-
+    # Disable Thermal Engine service
+        stop thermal-engine
 # Battery
 on property:persist.spectrum.profile=2
     # Set CPU Parameters
@@ -176,23 +177,27 @@ on property:persist.spectrum.profile=2
                 write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/up_rate_limit_us 500
     #
     # CPU Input Boost
-        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 0
-        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 0
-        write /sys/module/cpu_boost/parameters/input_boost_ms 0
-        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 0
-        write /sys/module/cpu_input_boost/parameters/input_boost_duration 0
-        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 0
-        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 0
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 25
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 15
+        write /sys/module/cpu_boost/parameters/input_boost_ms 750
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 10
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 750
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1248000
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 960000
     #
     # Dynamic SchedTune Boost
-        write /dev/stune/foreground/schedtune.sched_boost 0
-        write /dev/stune/rt/schedtune.sched_boost 0
-        write /dev/stune/schedtune.sched_boost 0
-        write /dev/stune/top-app/schedtune.sched_boost 0
+        write /dev/stune/foreground/schedtune.sched_boost 10
+        write /dev/stune/rt/schedtune.sched_boost 25
+        write /dev/stune/schedtune.sched_boost 10
+        write /dev/stune/top-app/schedtune.sched_boost 15
     #
     # Set Adreno GPU
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 401800000
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
+    #
+    # Entropy Tweaks
+        write /proc/sys/kernel/random/read_wakeup_threshold 64
+        write /proc/sys/kernel/random/write_wakeup_threshold 128
     #
     # Misc Tweaks
         write /sys/module/workqueue/parameters/power_efficient Y
@@ -201,7 +206,8 @@ on property:persist.spectrum.profile=2
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_battery.conf
         stop thermal-engine
         start thermal-engine
-
+    # Disable Thermal Engine service
+        stop thermal-engine
 # Gaming
 on property:persist.spectrum.profile=3
     # Set CPU Parameters
@@ -254,6 +260,10 @@ on property:persist.spectrum.profile=3
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 315000000
     #
+    # Entropy Tweaks
+        write /proc/sys/kernel/random/read_wakeup_threshold 64
+        write /proc/sys/kernel/random/write_wakeup_threshold 896
+    #
     # Misc Tweaks
         write /sys/module/workqueue/parameters/power_efficient N
     #
@@ -261,4 +271,5 @@ on property:persist.spectrum.profile=3
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
         stop thermal-engine
         start thermal-engine
-
+    # Disable Thermal Engine service
+        stop thermal-engine
