@@ -1,8 +1,10 @@
 #
-# Device : Xiaomi Mi 5 (gemini) Maintainer : MOVZX (MOVZX@Telegram.org)
+# Device        : Xiaomi Mi 5 (gemini)
+# Maintainer    : MOVZX (MOVZX@Telegram.org)
 #
 # "You hate me, but you cannot defeat me..." quote from Medieval II Total War
 #
+
 on boot
     # Set CPU Parameters
         # Disable thermal hotplug to switch governor
@@ -23,7 +25,9 @@ on boot
             write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
             # Performance
                 chmod 777 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
-                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor performance on darkness
+                write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor performance
+
+on darkness
     # Set CPU Parameters
         # Disable thermal hotplug to switch governor
             write /sys/module/msm_thermal/core_control/enabled 0
@@ -70,9 +74,6 @@ on boot
                 write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 20000
                 write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
                 write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 500
-        #
-        # Re-enable thermal hotplug
-            # write /sys/module/msm_thermal/core_control/enabled 1
     #
     # CPU Input Boost
         write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 50
@@ -112,31 +113,26 @@ on boot
         write /proc/sys/vm/vfs_cache_pressure 100
     #
     # Set I/O Scheduler
-        setprop sys.io.scheduler fiops
+        setprop sys.io.scheduler bfq
         # SDA
             write /sys/block/sda/queue/iostats 0
             write /sys/block/sda/queue/read_ahead_kb 256
-            write /sys/block/sda/queue/scheduler fiops
+            write /sys/block/sda/queue/scheduler bfq
         # SDE
             write /sys/block/sde/queue/iostats 0
             write /sys/block/sde/queue/read_ahead_kb 256
-            write /sys/block/sde/queue/scheduler fiops
+            write /sys/block/sde/queue/scheduler bfq
         # DM-0
             write /sys/block/dm-0/queue/iostats 0
             write /sys/block/dm-0/queue/read_ahead_kb 256
-            write /sys/block/dm-0/queue/scheduler fiops
+            write /sys/block/dm-0/queue/scheduler bfq
     #
     # SCSI Tweaks
         write /sys/module/scsi_mod/parameters/use_blk_mq Y
     #
-    # Entropy Tweaks
-        write /proc/sys/kernel/random/read_wakeup_threshold 64
-        write /proc/sys/kernel/random/write_wakeup_threshold 896
-    #
     # Misc Tweaks
-        # write /sys/devices/soc/soc:fpc_fpc1020/enable_wakeup 1
+        write /sys/devices/soc/soc:fpc_fpc1020/enable_wakeup 1
         chmod 777 /sys/module/workqueue/parameters/power_efficient
-        write /sys/kernel/dyn_fsync/Dyn_fsync_active 1
         write /sys/module/msm_thermal/parameters/enabled N
         write /sys/module/workqueue/parameters/power_efficient Y
     #
@@ -154,12 +150,12 @@ on boot
         setprop ro.sys.fw.dex2oat_thread_count 4
         setprop ro.sys.sdcardfs true
         setprop sys.use_fifo_ui 1
-        setprop wifi.supplicant_scan_interval 3600 on property:dev.bootcomplete=1
-    # Fire up the Darkness! You hate me, but you cannot defeat me...
+        setprop wifi.supplicant_scan_interval 3600
+
+on property:dev.bootcomplete=1
+    # Fire up the Darkness!
+    # You hate me, but you cannot defeat me...
         trigger darkness
-    # DK, not Syberia...
-        stop vendor.msm_irqbalance
-    # Disable Thermal Engine service
-        stop thermal-engine
     # Sensor Fix
-        restorecon -rv /vendor/mnt/persist
+        restorecon -rv /mnt/vendor/persist
+
