@@ -62,7 +62,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.gyro.disable=0 \
-    persist.camera.imglib.fddsp=1
+    persist.camera.imglib.fddsp=1 \
+    persist.camera.eis.enable=1
 
 # CNE
 PRODUCT_PROPERTY_OVERRIDES += \
