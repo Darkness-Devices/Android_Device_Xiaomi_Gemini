@@ -81,7 +81,6 @@ on property:persist.spectrum.profile=0
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
         stop thermal-engine
-        start thermal-engine
 
 # Performance
 on property:persist.spectrum.profile=1
@@ -141,7 +140,6 @@ on property:persist.spectrum.profile=1
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
         stop thermal-engine
-        start thermal-engine
 
 # Battery
 on property:persist.spectrum.profile=2
@@ -198,7 +196,6 @@ on property:persist.spectrum.profile=2
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_battery.conf
         stop thermal-engine
-        start thermal-engine
 
 # Gaming
 on property:persist.spectrum.profile=3

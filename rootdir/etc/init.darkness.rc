@@ -113,33 +113,37 @@ on darkness
         write /proc/sys/vm/vfs_cache_pressure 100
     #
     # Set I/O Scheduler
-        setprop sys.io.scheduler bfq
+        setprop sys.io.scheduler anxiety
         # SDA
+            write /sys/block/sda/queue/add_random 0
             write /sys/block/sda/queue/iostats 0
             write /sys/block/sda/queue/read_ahead_kb 256
-            write /sys/block/sda/queue/scheduler bfq
+            write /sys/block/sda/queue/scheduler anxiety
         # SDE
+            write /sys/block/sde/queue/add_random 0
             write /sys/block/sde/queue/iostats 0
             write /sys/block/sde/queue/read_ahead_kb 256
-            write /sys/block/sde/queue/scheduler bfq
+            write /sys/block/sde/queue/scheduler anxiety
         # DM-0
+            write /sys/block/dm-0/queue/add_random 0
             write /sys/block/dm-0/queue/iostats 0
             write /sys/block/dm-0/queue/read_ahead_kb 256
-            write /sys/block/dm-0/queue/scheduler bfq
+            write /sys/block/dm-0/queue/scheduler anxiety
     #
     # SCSI Tweaks
         write /sys/module/scsi_mod/parameters/use_blk_mq Y
     #
     # Misc Tweaks
         write /sys/devices/soc/soc:fpc_fpc1020/enable_wakeup 1
+        chmod 777 /sys/module/sync/parameters/fsync_enabled
         chmod 777 /sys/module/workqueue/parameters/power_efficient
         write /sys/module/msm_thermal/parameters/enabled N
+        write /sys/module/sync/parameters/fsync_enabled N
         write /sys/module/workqueue/parameters/power_efficient Y
     #
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
         stop thermal-engine
-        start thermal-engine
     #
     # Darkness Mods
         setprop dalvik.vm.dex2oat-threads 4
@@ -156,6 +160,7 @@ on property:dev.bootcomplete=1
     # Fire up the Darkness!
     # You hate me, but you cannot defeat me...
         trigger darkness
+        stop thermal-engine
     # Sensor Fix
         restorecon -rv /mnt/vendor/persist
 
