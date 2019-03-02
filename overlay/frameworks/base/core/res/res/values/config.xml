@@ -446,8 +446,4 @@
 
     <!-- Period of time in which to consider light samples in milliseconds. -->
     <integer name="config_autoBrightnessAmbientLightHorizon">5000</integer>
-
-    <!-- Allow waking up from Home key -->
-    <bool name="config_allowTheaterModeWakeFromKey">true</bool>
-    <bool name="config_HomeWakeButton">true</bool>
 </resources>
