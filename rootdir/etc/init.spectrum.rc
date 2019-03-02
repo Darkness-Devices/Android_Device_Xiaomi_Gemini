@@ -71,16 +71,25 @@ on property:persist.spectrum.profile=0
         write /dev/stune/schedtune.sched_boost 20
         write /dev/stune/top-app/schedtune.sched_boost 30
     #
+    # DevFreq
+        write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/mbps_zones "1525 5195 11863 13763"
+        write /sys/class/devfreq/soc:qcom,cpubw/governor "cpufreq"
+        write /sys/class/devfreq/soc:qcom,cpubw/min_freq 1525
+        write /sys/class/devfreq/soc:qcom,memlat-cpu0/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,memlat-cpu2/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,mincpubw/governor "cpufreq"
+    #
     # Set Adreno GPU
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
     #
     # Misc Tweaks
-        write /sys/module/workqueue/parameters/power_efficient Y
+        write /sys/module/workqueue/parameters/power_efficient N
     #
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
         stop thermal-engine
+        start thermal-engine
 
 # Performance
 on property:persist.spectrum.profile=1
@@ -130,6 +139,14 @@ on property:persist.spectrum.profile=1
         write /dev/stune/schedtune.sched_boost 30
         write /dev/stune/top-app/schedtune.sched_boost 40
     #
+    # DevFreq
+        write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/mbps_zones "13763"
+        write /sys/class/devfreq/soc:qcom,cpubw/governor "performance"
+        write /sys/class/devfreq/soc:qcom,cpubw/min_freq 13763
+        write /sys/class/devfreq/soc:qcom,memlat-cpu0/governor "performance"
+        write /sys/class/devfreq/soc:qcom,memlat-cpu2/governor "performance"
+        write /sys/class/devfreq/soc:qcom,mincpubw/governor "performance"
+    #
     # Set Adreno GPU
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 214000000
@@ -140,6 +157,7 @@ on property:persist.spectrum.profile=1
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
         stop thermal-engine
+        start thermal-engine
 
 # Battery
 on property:persist.spectrum.profile=2
@@ -172,19 +190,27 @@ on property:persist.spectrum.profile=2
                 write /sys/devices/system/cpu/cpu2/cpufreq/darkenergy/up_rate_limit_us 500
     #
     # CPU Input Boost
-        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 0
-        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 0
-        write /sys/module/cpu_boost/parameters/input_boost_ms 0
-        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 0
-        write /sys/module/cpu_input_boost/parameters/input_boost_duration 0
-        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 0
-        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 0
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_rt 25
+        write /sys/module/cpu_boost/parameters/dynamic_stune_boost_top_app 15
+        write /sys/module/cpu_boost/parameters/input_boost_ms 750
+        write /sys/module/cpu_input_boost/parameters/dynamic_stune_boost 10
+        write /sys/module/cpu_input_boost/parameters/input_boost_duration 750
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_hp 1248000
+        write /sys/module/cpu_input_boost/parameters/input_boost_freq_lp 960000
     #
     # Dynamic SchedTune Boost
-        write /dev/stune/foreground/schedtune.sched_boost 0
-        write /dev/stune/rt/schedtune.sched_boost 0
-        write /dev/stune/schedtune.sched_boost 0
-        write /dev/stune/top-app/schedtune.sched_boost 0
+        write /dev/stune/foreground/schedtune.sched_boost 10
+        write /dev/stune/rt/schedtune.sched_boost 25
+        write /dev/stune/schedtune.sched_boost 10
+        write /dev/stune/top-app/schedtune.sched_boost 15
+    #
+    # DevFreq
+        write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/mbps_zones "762 2288 5195"
+        write /sys/class/devfreq/soc:qcom,cpubw/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,cpubw/min_freq 762
+        write /sys/class/devfreq/soc:qcom,memlat-cpu0/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,memlat-cpu2/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,mincpubw/governor "powersave"
     #
     # Set Adreno GPU
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 401800000
@@ -196,6 +222,7 @@ on property:persist.spectrum.profile=2
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_battery.conf
         stop thermal-engine
+        start thermal-engine
 
 # Gaming
 on property:persist.spectrum.profile=3
@@ -244,6 +271,14 @@ on property:persist.spectrum.profile=3
         write /dev/stune/rt/schedtune.sched_boost 70
         write /dev/stune/schedtune.sched_boost 40
         write /dev/stune/top-app/schedtune.sched_boost 50
+    #
+    # DevFreq
+        write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/mbps_zones "13763"
+        write /sys/class/devfreq/soc:qcom,cpubw/governor "performance"
+        write /sys/class/devfreq/soc:qcom,cpubw/min_freq 13763
+        write /sys/class/devfreq/soc:qcom,memlat-cpu0/governor "performance"
+        write /sys/class/devfreq/soc:qcom,memlat-cpu2/governor "performance"
+        write /sys/class/devfreq/soc:qcom,mincpubw/governor "performance"
     #
     # Set Adreno GPU
         write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 624000000

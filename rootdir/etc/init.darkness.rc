@@ -10,6 +10,12 @@ on boot
         # Disable thermal hotplug to switch governor
             write /sys/module/msm_thermal/core_control/enabled 0
         #
+        # Set online all CPUs
+            write /sys/devices/system/cpu/cpu0/online 0
+            write /sys/devices/system/cpu/cpu1/online 0
+            write /sys/devices/system/cpu/cpu2/online 0
+            write /sys/devices/system/cpu/cpu3/online 0
+        #
         # Little
             chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
             chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
@@ -92,6 +98,14 @@ on darkness
         write /dev/stune/schedtune.sched_boost 20
         write /dev/stune/top-app/schedtune.sched_boost 30
     #
+    # DevFreq
+        write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/mbps_zones "1525 5195 11863 13763"
+        write /sys/class/devfreq/soc:qcom,cpubw/governor "cpufreq"
+        write /sys/class/devfreq/soc:qcom,cpubw/min_freq 1525
+        write /sys/class/devfreq/soc:qcom,memlat-cpu0/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,memlat-cpu2/governor "powersave"
+        write /sys/class/devfreq/soc:qcom,mincpubw/governor "cpufreq"
+    #
     # Set Adreno GPU
         chmod 777 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
         chmod 777 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
@@ -113,22 +127,22 @@ on darkness
         write /proc/sys/vm/vfs_cache_pressure 100
     #
     # Set I/O Scheduler
-        setprop sys.io.scheduler anxiety
+        setprop sys.io.scheduler fiops
         # SDA
             write /sys/block/sda/queue/add_random 0
             write /sys/block/sda/queue/iostats 0
-            write /sys/block/sda/queue/read_ahead_kb 256
-            write /sys/block/sda/queue/scheduler anxiety
+            write /sys/block/sda/queue/read_ahead_kb 512
+            write /sys/block/sda/queue/scheduler fiops
         # SDE
             write /sys/block/sde/queue/add_random 0
             write /sys/block/sde/queue/iostats 0
-            write /sys/block/sde/queue/read_ahead_kb 256
-            write /sys/block/sde/queue/scheduler anxiety
+            write /sys/block/sde/queue/read_ahead_kb 512
+            write /sys/block/sde/queue/scheduler fiops
         # DM-0
             write /sys/block/dm-0/queue/add_random 0
             write /sys/block/dm-0/queue/iostats 0
-            write /sys/block/dm-0/queue/read_ahead_kb 256
-            write /sys/block/dm-0/queue/scheduler anxiety
+            write /sys/block/dm-0/queue/read_ahead_kb 512
+            write /sys/block/dm-0/queue/scheduler fiops
     #
     # SCSI Tweaks
         write /sys/module/scsi_mod/parameters/use_blk_mq Y
@@ -139,11 +153,12 @@ on darkness
         chmod 777 /sys/module/workqueue/parameters/power_efficient
         write /sys/module/msm_thermal/parameters/enabled N
         write /sys/module/sync/parameters/fsync_enabled N
-        write /sys/module/workqueue/parameters/power_efficient Y
+        write /sys/module/workqueue/parameters/power_efficient N
     #
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
         stop thermal-engine
+        start thermal-engine
     #
     # Darkness Mods
         setprop dalvik.vm.dex2oat-threads 4
@@ -160,7 +175,6 @@ on property:dev.bootcomplete=1
     # Fire up the Darkness!
     # You hate me, but you cannot defeat me...
         trigger darkness
-        stop thermal-engine
     # Sensor Fix
         restorecon -rv /mnt/vendor/persist
 
