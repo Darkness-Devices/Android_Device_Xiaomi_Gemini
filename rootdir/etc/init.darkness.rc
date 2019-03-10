@@ -11,10 +11,10 @@ on boot
             write /sys/module/msm_thermal/core_control/enabled 0
         #
         # Set online all CPUs
-            write /sys/devices/system/cpu/cpu0/online 0
-            write /sys/devices/system/cpu/cpu1/online 0
-            write /sys/devices/system/cpu/cpu2/online 0
-            write /sys/devices/system/cpu/cpu3/online 0
+            write /sys/devices/system/cpu/cpu0/online 1
+            write /sys/devices/system/cpu/cpu1/online 1
+            write /sys/devices/system/cpu/cpu2/online 1
+            write /sys/devices/system/cpu/cpu3/online 1
         #
         # Little
             chmod 777 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -127,22 +127,22 @@ on darkness
         write /proc/sys/vm/vfs_cache_pressure 100
     #
     # Set I/O Scheduler
-        setprop sys.io.scheduler fiops
+        setprop sys.io.scheduler bfq
         # SDA
             write /sys/block/sda/queue/add_random 0
             write /sys/block/sda/queue/iostats 0
-            write /sys/block/sda/queue/read_ahead_kb 512
-            write /sys/block/sda/queue/scheduler fiops
+            write /sys/block/sda/queue/read_ahead_kb 128
+            write /sys/block/sda/queue/scheduler bfq
         # SDE
             write /sys/block/sde/queue/add_random 0
             write /sys/block/sde/queue/iostats 0
-            write /sys/block/sde/queue/read_ahead_kb 512
-            write /sys/block/sde/queue/scheduler fiops
+            write /sys/block/sde/queue/read_ahead_kb 128
+            write /sys/block/sde/queue/scheduler bfq
         # DM-0
             write /sys/block/dm-0/queue/add_random 0
             write /sys/block/dm-0/queue/iostats 0
-            write /sys/block/dm-0/queue/read_ahead_kb 512
-            write /sys/block/dm-0/queue/scheduler fiops
+            write /sys/block/dm-0/queue/read_ahead_kb 128
+            write /sys/block/dm-0/queue/scheduler bfq
     #
     # SCSI Tweaks
         write /sys/module/scsi_mod/parameters/use_blk_mq Y
@@ -153,7 +153,7 @@ on darkness
         chmod 777 /sys/module/workqueue/parameters/power_efficient
         write /sys/module/msm_thermal/parameters/enabled N
         write /sys/module/sync/parameters/fsync_enabled N
-        write /sys/module/workqueue/parameters/power_efficient N
+        write /sys/module/workqueue/parameters/power_efficient Y
     #
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
@@ -177,4 +177,5 @@ on property:dev.bootcomplete=1
         trigger darkness
     # Sensor Fix
         restorecon -rv /mnt/vendor/persist
+
 

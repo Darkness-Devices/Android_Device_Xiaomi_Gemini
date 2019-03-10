@@ -84,7 +84,7 @@ on property:persist.spectrum.profile=0
         write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
     #
     # Misc Tweaks
-        write /sys/module/workqueue/parameters/power_efficient N
+        write /sys/module/workqueue/parameters/power_efficient Y
     #
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
@@ -290,4 +290,6 @@ on property:persist.spectrum.profile=3
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996_gaming.conf
         stop thermal-engine
+        start thermal-engine
+
 
