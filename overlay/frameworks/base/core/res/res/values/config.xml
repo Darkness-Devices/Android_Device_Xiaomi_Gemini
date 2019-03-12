@@ -446,4 +446,7 @@
 
     <!-- Period of time in which to consider light samples in milliseconds. -->
     <integer name="config_autoBrightnessAmbientLightHorizon">5000</integer>
+     
+    <!-- AlwaysOnDisplay -->
+    <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
 </resources>
