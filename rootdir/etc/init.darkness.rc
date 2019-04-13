@@ -155,6 +155,45 @@ on darkness
         write /sys/module/sync/parameters/fsync_enabled N
         write /sys/module/workqueue/parameters/power_efficient Y
     #
+    # Some Mods from Morpo Tweaks
+        write /proc/sys/debug/exception-trace 0
+        write /sys/devices/system/edac/cpu/log_ce 0
+        write /sys/devices/system/edac/cpu/log_ue 0
+        write /sys/kernel/printk_mode/printk_mode 0
+        write /sys/module/alarm/parameters/debug_mask 0
+        write /sys/module/alarm_dev/parameters/debug_mask 0
+        write /sys/module/binder/parameters/debug_mask 0
+        write /sys/module/binder/parameters/debug_mask 0
+        write /sys/module/bluetooth/parameters/disable_ertm Y
+        write /sys/module/bluetooth/parameters/disable_esco Y
+        write /sys/module/debug/parameters/enable_event_log 0
+        write /sys/module/dwc3/parameters/ep_addr_rxdbg_mask 0 
+        write /sys/module/dwc3/parameters/ep_addr_txdbg_mask 0
+        write /sys/module/earlysuspend/parameters/debug_mask 0
+        write /sys/module/edac_core/parameters/edac_mc_log_ce 0
+        write /sys/module/edac_core/parameters/edac_mc_log_ue 0
+        write /sys/module/glink/parameters/debug_mask 0
+        write /sys/module/hid_apple/parameters/fnmode 0
+        write /sys/module/hid_magicmouse/parameters/emulate_3button N
+        write /sys/module/hid_magicmouse/parameters/emulate_scroll_wheel N
+        write /sys/module/ip6_tunnel/parameters/log_ecn_error N
+        write /sys/module/lowmemorykiller/parameters/debug_level 0
+        write /sys/module/msm_show_resume_irq/parameters/debug_mask 0
+        write /sys/module/msm_smd/parameters/debug_mask 0
+        write /sys/module/msm_smem/parameters/debug_mask 0 
+        write /sys/module/otg_wakelock/parameters/enabled N 
+        write /sys/module/printk/parameters/console_suspend Y
+        write /sys/module/service_locator/parameters/enable 0 
+        write /sys/module/sit/parameters/log_ecn_error N
+        write /sys/module/smb135x_charger/parameters/use_wlock N
+        write /sys/module/smb135x_charger/parameters/use_wlock N
+        write /sys/module/smem_log/parameters/log_enable 0
+        write /sys/module/smp2p/parameters/debug_mask 0
+        write /sys/module/sync/parameters/fsync_enabled N
+        write /sys/module/touch_core_base/parameters/debug_mask 0
+        write /sys/module/usb_bam/parameters/enable_event_log 0
+        write /sys/module/xhci_hcd/parameters/wl_divide N
+    #
     # Thermal Configs
         setprop sys.qcom.thermalcfg /vendor/etc/thermal-engine-8996.conf
         stop thermal-engine
